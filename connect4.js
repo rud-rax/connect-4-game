@@ -9,11 +9,13 @@ var table = $('.board tr')
 
 var player = null ; 
 
+var board_history = [] ; 
+
 // FUNCTIONS
 
-function changeColor(row, col, player) {
+function changeColor(row, col, color) {
     // changes the color of a particular cell
-    return table.eq(row).find('td').eq(col).find('button').css('background-color', player.color)
+    return table.eq(row).find('td').eq(col).find('button').css('background-color', color)
 }
 
 function returnColor(row, col) {
@@ -142,6 +144,7 @@ function check(player) {
 // EVENTS
 $('.board').hide()
 $('#clear-button').hide()
+$('#back-button').hide()
 
 $('#restart-button').on('click', function () {
 
@@ -154,6 +157,8 @@ $('#restart-button').on('click', function () {
 
     $('.board').fadeIn('1000')
     $('#clear-button').fadeIn('1000')
+    $('#back-button').fadeIn('1000')
+
 
 })
 
@@ -162,8 +167,26 @@ $('#clear-button').on('click', function () {
     $('td button').css('background-color', 'grey')
     $('h1').text("Connect 4 Game")
     counter = 0 
+    $('#back-button').removeAttr('disabled')
+    board_history = []
 
 
+
+})
+
+$('#back-button').on('click', function(){
+
+    if (board_history.length === 0 ){
+        return
+    }
+    var temp = board_history.pop()
+
+    row = temp[0]
+    col = temp[1]
+
+
+    changeColor(row,col,'rgb(128 ,128 ,128)')
+    counter -- 
 })
 
 
@@ -191,16 +214,19 @@ function gameLogic() {
 
     // console.log(row,col)
     // $(this).css('background-color', player2.color)
-    changeColor(row, col, player)
+    changeColor(row, col, player.color)
+    board_history.push([row,col])
     if (check(player)) {
         $('h1').text(player.name + " wins !")
         counter = 0 
+        $('#back-button').attr('disabled' , 'true')
         return 1
 
 
     }
 
     counter ++ 
+    console.log(board_history)
     return 0
 
 }

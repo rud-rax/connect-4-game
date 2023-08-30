@@ -226,7 +226,7 @@ function gameLogic() {
     }
 
     counter ++ 
-    console.log(board_history)
+    // console.log(board_history)
     return 0
 
 }
